@@ -1,3 +1,4 @@
+const path = require("path");
 
 const webpack = require("webpack");
 const NODE_ENV =  process.env.NODE_ENV || "development";
@@ -12,11 +13,19 @@ module.exports =  {
         publicPath: "/js/",
         filename: "[name].js"
     },
+/*
+    externals: {
+      jquery: "$"
+    },*/
 
     watch: NODE_ENV === "development",
     devtool: NODE_ENV === "development"? "cheap-inline-module-source-map" : null,
 
     plugins: [
+      new webpack.ProvidePlugin({
+        _: "lodash"
+      }),
+      new webpack.ContextReplacementPlugin(/node_modules\\moment\\locale/, /ru|en-gb/),
       new webpack.NoErrorsPlugin(),
     	new webpack.DefinePlugin({
     		NODE_ENV: JSON.stringify(NODE_ENV)
@@ -40,7 +49,7 @@ module.exports =  {
 
     module: {
     	loaders: [
-    		{test: /\.js$/, loaders: ["babel"]}
+    		{test: /\.js$/, loaders: ["babel"]}    	
     	]
     }
 };
