@@ -4,13 +4,11 @@ const webpack = require("webpack");
 const NODE_ENV =  process.env.NODE_ENV || "development";
 
 module.exports =  {
-    context: __dirname + "/frontend",
-    entry: {
-        app: "./app"
-    },
+    context: path.resolve(__dirname, "frontend"),
+    entry: "./main",
     output: {
-        path: __dirname + "/public/js",
-        publicPath: "/js/",
+        path: path.resolve(__dirname, "public"),
+        publicPath: "/",
         filename: "[name].js"
     },
 /*
@@ -53,22 +51,31 @@ module.exports =  {
 
     module: {
     	loaders: [
-    		{test: /\.js$/, exclude: wrapRegExp(/\\node_modules\\/, "exclude"), loaders: ["babel"]}
+    		{
+          test: /\.js$/,
+          exclude: /\\node_modules\\/,
+          loader: "babel"
+        },
+        {
+          test: /\.css$/,
+          exclude: /\\node_modules\\/,
+          loaders: ["style", "css"]
+        },
+        {
+          test: /\.jade$/,
+          exclude: /\\node_modules\\/,
+          loader: "jade"
+        },
+        {
+          test: /\.(png|jpg|svg|ttf|eot|woff|woff2)$/,
+          exclude: /\\node_modules\\/,
+          loader: "url?name=[path][name].[ext]?limit=1024"
+        }
     	],
 
-      noParse: wrapRegExp(/\\node_modules\\[^!]+$/, "noParse")
+      noParse: /angular\\angular/
     }
 };
-
-function wrapRegExp(regExp, label) {
-  regExp.test = function(path) {
-    console.log(label, path);
-    return RegExp.prototype.test.call(this, path);
-  };
-
-  return regExp;
-}
-
 
 if (NODE_ENV == "production") {
     module.exports.plugins.push(

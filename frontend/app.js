@@ -24,7 +24,8 @@ if (handler) {
 }*/
 
 
-const old = require("imports?workSettings=>{delay:500}!exports?Work!old");
+/*const old = require("imports?workSettings=>{delay:500}!exports?Work!old");
+old();*/
 /*const moment = require("moment");
 
 
