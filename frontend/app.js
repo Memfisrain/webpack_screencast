@@ -1,5 +1,7 @@
 "use strict";
 
+//import angular from "angular";
+
 /*let moduleName = location.pathname.slice(1);
 
 let context = require.context("./routes/", false, /\.js$/);
@@ -22,7 +24,7 @@ if (handler) {
 }*/
 
 
-console.log(typeof _);
+const old = require("imports?workSettings=>{delay:500}!exports?Work!old");
 /*const moment = require("moment");
 
 

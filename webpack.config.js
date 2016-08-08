@@ -22,9 +22,9 @@ module.exports =  {
     devtool: NODE_ENV === "development"? "cheap-inline-module-source-map" : null,
 
     plugins: [
-      new webpack.ProvidePlugin({
+     /* new webpack.ProvidePlugin({
         _: "lodash"
-      }),
+      }),*/
       new webpack.ContextReplacementPlugin(/node_modules\\moment\\locale/, /ru|en-gb/),
       new webpack.NoErrorsPlugin(),
     	new webpack.DefinePlugin({
@@ -37,6 +37,10 @@ module.exports =  {
     ],
 
     resolve: {
+        root: __dirname + "/vendor",
+        alias: {
+          old: "old/old"
+        },
         moduleDirectories: ["node_modules"],
         extensions: ["", ".js"]
     },
@@ -49,10 +53,21 @@ module.exports =  {
 
     module: {
     	loaders: [
-    		{test: /\.js$/, loaders: ["babel"]}    	
-    	]
+    		{test: /\.js$/, exclude: wrapRegExp(/\\node_modules\\/, "exclude"), loaders: ["babel"]}
+    	],
+
+      noParse: wrapRegExp(/\\node_modules\\[^!]+$/, "noParse")
     }
 };
+
+function wrapRegExp(regExp, label) {
+  regExp.test = function(path) {
+    console.log(label, path);
+    return RegExp.prototype.test.call(this, path);
+  };
+
+  return regExp;
+}
 
 
 if (NODE_ENV == "production") {
