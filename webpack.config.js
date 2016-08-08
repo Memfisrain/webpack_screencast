@@ -1,15 +1,21 @@
 const path = require("path");
 
 const webpack = require("webpack");
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const NODE_ENV =  process.env.NODE_ENV || "development";
+const rimrag = require("rimraf");
 
 module.exports =  {
     context: path.resolve(__dirname, "frontend"),
-    entry: "./main",
+    entry: {
+      home: "./home",
+      about: "./about"
+    },
     output: {
-        path: path.resolve(__dirname, "public"),
-        publicPath: "/",
-        filename: "[name].js"
+        path: path.resolve(__dirname, "public/assets"),
+        publicPath: "/assets/",
+        filename: "[name].js",
+        library: "[name]"
     },
 /*
     externals: {
@@ -23,15 +29,16 @@ module.exports =  {
      /* new webpack.ProvidePlugin({
         _: "lodash"
       }),*/
+      new ExtractTextPlugin("[name].css", {allChunks: true}),
       new webpack.ContextReplacementPlugin(/node_modules\\moment\\locale/, /ru|en-gb/),
       new webpack.NoErrorsPlugin(),
     	new webpack.DefinePlugin({
     		NODE_ENV: JSON.stringify(NODE_ENV)
-    	})/*,
+    	}),
       new webpack.optimize.CommonsChunkPlugin({
-          name: "common",
+          names: ["common", "common.js"],
           minChunks: 2
-      })*/
+      })
     ],
 
     resolve: {
@@ -60,6 +67,10 @@ module.exports =  {
           test: /\.css$/,
           exclude: /\\node_modules\\/,
           loaders: ["style", "css"]
+        },
+        {
+          test: /\.styl$/,
+          loader: ExtractTextPlugin.extract("style", "css!stylus?resolve url")
         },
         {
           test: /\.jade$/,

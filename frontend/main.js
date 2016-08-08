@@ -22,5 +22,3 @@ require.ensure([], require => {
 
   document.body.appendChild(pandaMenu.elem);
 });
-
-

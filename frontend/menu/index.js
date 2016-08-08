@@ -1,4 +1,4 @@
-import style from "./menu.css";
+import style from "./menu.styl";
 import template from "./menu.jade";
 
 export default class Menu {
