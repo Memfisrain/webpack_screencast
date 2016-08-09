@@ -2,19 +2,21 @@ const path = require("path");
 
 const webpack = require("webpack");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const AssetsPlugin = require("assets-webpack-plugin");
 const NODE_ENV =  process.env.NODE_ENV || "development";
-const rimrag = require("rimraf");
+const rimraf = require("rimraf");
 
 module.exports =  {
     context: path.resolve(__dirname, "frontend"),
     entry: {
       home: "./home",
-      about: "./about"
+      about: "./about",
+      common: "./common"
     },
     output: {
         path: path.resolve(__dirname, "public/assets"),
         publicPath: "/assets/",
-        filename: "[name].js",
+        filename: "[name].[chunkhash].js",
         library: "[name]"
     },
 /*
@@ -28,16 +30,25 @@ module.exports =  {
     plugins: [
      /* new webpack.ProvidePlugin({
         _: "lodash"
-      }),*/
-      new ExtractTextPlugin("[name].css", {allChunks: true}),
+      }),
+      {
+        apply: compiler => {
+          rimraf.sync(compiler.options.output.path)
+        }
+      },*/
       new webpack.ContextReplacementPlugin(/node_modules\\moment\\locale/, /ru|en-gb/),
       new webpack.NoErrorsPlugin(),
-    	new webpack.DefinePlugin({
-    		NODE_ENV: JSON.stringify(NODE_ENV)
-    	}),
+      new webpack.DefinePlugin({
+        NODE_ENV: JSON.stringify(NODE_ENV),
+      }),
       new webpack.optimize.CommonsChunkPlugin({
-          names: ["common", "common.js"],
+          name: "common",
           minChunks: 2
+      }),
+      new ExtractTextPlugin("styles.[contenthash].css", {allChunks: true}),
+      new AssetsPlugin({
+        filename: "assets.json",
+        path: path.resolve(__dirname, "public/assets")
       })
     ],
 
@@ -80,11 +91,19 @@ module.exports =  {
         {
           test: /\.(png|jpg|svg|ttf|eot|woff|woff2)$/,
           exclude: /\\node_modules\\/,
-          loader: "url?name=[path][name].[ext]?limit=1024"
+          loader: "url?name=[path][name].[hash:6].[ext]"
         }
     	],
 
       noParse: /angular\\angular/
+    },
+    devServer: {
+      host: "localhost",
+      port: "8080",
+      proxy: [{
+        path: /.*/,
+        target: "http://localhost:3000"
+      }]
     }
 };
 

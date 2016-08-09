@@ -29,9 +29,11 @@
   },
   "devDependencies": {
     "angular": "^1.5.8",
+    "assets-webpack-plugin": "^3.4.0",
     "moment": "^2.14.1",
     "open": "0.0.5",
-    "rimraf": "^2.5.4"
+    "rimraf": "^2.5.4",
+    "webpack-dev-server": "^1.14.1"
   },
   "repository": {
     "type": "git",
