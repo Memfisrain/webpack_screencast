@@ -1,28 +1,30 @@
 .menu
-	.list
-		display: none;
-	&.open
-		.list
-			display: block;
+  .list
+    display: none;
+  &.open
+    .list
+      display: block;
 
 .list
-	margin: 0;
-	padding: 0;
-	list-style: none;
-	>li
-		float: left;
-		padding: 5px;
-		border-right: 1px solid black;
-		&:last-child
-			border-right: none;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  > li
+    float: left;
+    padding: 5px;
+    border-right: 1px solid black;
+    > a
+      color: blue;
+    &:last-child
+      border-right: none;
 
-.title 
-	font-size: 20px;
-	color: #666;
-	cursor: pointer;
-	&:before
-		content: "";
-		display: inline-block;
-		width: 120px;
-		height: 20px;
-		background: url(logo.png) no-repeat;
+.title
+  font-size: 20px;
+  color: #666;
+  cursor: pointer;
+  &:before
+    content: "";
+    display: inline-block;
+    width: 120px;
+    height: 20px;
+    background: url(logo.png) no-repeat;

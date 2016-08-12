@@ -5,7 +5,7 @@ exports.showMenu = function() {
 		let Menu = require("./menu").default;
 
 		let menu = new Menu({
-			title: "Home Page",
+			title: "Home Page Updated",
 			items: [
 				{text: "releases", href: "#releases"},
 				{text: "contacts", href: "#contacts"},

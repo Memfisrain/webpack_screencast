@@ -9,14 +9,14 @@ const rimraf = require("rimraf");
 module.exports =  {
     context: path.resolve(__dirname, "frontend"),
     entry: {
-      home: "./home",
+      home:  "./home",
       about: "./about",
       common: "./common"
     },
     output: {
         path: path.resolve(__dirname, "public/assets"),
-        publicPath: "/assets/",
-        filename: "[name].[chunkhash].js",
+        publicPath: "/",
+        filename: "[name].js",
         library: "[name]"
     },
 /*
@@ -39,17 +39,15 @@ module.exports =  {
       new webpack.ContextReplacementPlugin(/node_modules\\moment\\locale/, /ru|en-gb/),
       new webpack.NoErrorsPlugin(),
       new webpack.DefinePlugin({
-        NODE_ENV: JSON.stringify(NODE_ENV),
+        NODE_ENV: JSON.stringify(NODE_ENV)
       }),
       new webpack.optimize.CommonsChunkPlugin({
           name: "common",
           minChunks: 2
       }),
-      new ExtractTextPlugin("styles.[contenthash].css", {allChunks: true}),
-      new AssetsPlugin({
-        filename: "assets.json",
-        path: path.resolve(__dirname, "public/assets")
-      })
+      //new ExtractTextPlugin("styles.[contenthash].css", {allChunks: true}),
+      new ExtractTextPlugin("styles.css", {allChunks: true, disable: NODE_ENV === "development"})
+
     ],
 
     resolve: {
@@ -91,7 +89,7 @@ module.exports =  {
         {
           test: /\.(png|jpg|svg|ttf|eot|woff|woff2)$/,
           exclude: /\\node_modules\\/,
-          loader: "url?name=[path][name].[hash:6].[ext]"
+          loader: "url?name=[path][name].[ext]?[hash:6]"
         }
     	],
 
@@ -103,7 +101,8 @@ module.exports =  {
       proxy: [{
         path: /.*/,
         target: "http://localhost:3000"
-      }]
+      }],
+      hot: true
     }
 };
 
